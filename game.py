@@ -1,7 +1,7 @@
 import pygame
 from player import Player
 from platform import TileLoader
-
+from enemies import Ennemies
 
 class Game:
 
@@ -10,6 +10,8 @@ class Game:
         self.screen_width = self.screen.get_width()
         self.screen_height = self.screen.get_height()
         self.player = Player(self)
+        self.all_ennemies = pygame.sprite.Group()
+        self.enemies = Ennemies(self)
         self.pressed = {}
         self.g_force_activated = False
         self.tile = TileLoader(self)
@@ -23,6 +25,8 @@ class Game:
         self.screen.blit(self.player.trail.image, (self.player.rect.x + self.player.trail.x_offset,
                                                    self.player.rect.y + self.player.trail.y_offset))
         self.screen.blit(self.player.image, self.player.rect)
+        self.all_ennemies.draw(self.screen)
+        self.enemies.check_player_collide()
         self.player.is_touching_ground()
         self.player.update_dash()
         self.player.update_y_value()
