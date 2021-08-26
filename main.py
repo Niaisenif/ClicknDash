@@ -33,6 +33,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 game.player.jump()
+                game.enemy.shoot()
             elif not event.key == pygame.K_SPACE:
                 game.pressed[event.key] = True
 
