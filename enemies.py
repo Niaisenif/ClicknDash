@@ -1,5 +1,7 @@
 import pygame
 
+import animations
+
 
 class Enemy(pygame.sprite.Sprite):
 
@@ -19,24 +21,27 @@ class Enemy(pygame.sprite.Sprite):
     def shoot(self):
         self.game.enemy_projectile.new_projectile(self.rect.x, self.rect.y, 5, 1)
 
-class EnemyProjectile(pygame.sprite.Sprite):
+
+class EnemyProjectile(animations.AnimateSprite):
 
     def __init__(self, game):
-        super().__init__()
-        self.image = pygame.image.load("assets/projectile.png")
+        super().__init__('projectile')
         self.rect = self.image.get_rect()
         self.game = game
         self.rect.x = 0
         self.rect.y = 0
         self.velocity = 0
         self.size = 1
-        print("hi")
+        self.start_animation()
 
     def new_projectile(self, x, y, velocity, size):
         self.game.all_enemy_projectiles.add(self)
         self.rect.x, self.rect.y = x, y
         self.velocity = velocity
         self.size = size
+
+    def update_animation(self):
+        self.animate(loop=True)
 
     def move(self):
         self.rect.x -= self.velocity

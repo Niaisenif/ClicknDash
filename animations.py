@@ -20,6 +20,7 @@ class AnimateSprite(pygame.sprite.Sprite):
                 self.current_image = 0
                 if not loop:
                     self.animation = False
+            print(self.current_image)
             self.image = self.images[self.current_image]
 
 
@@ -33,5 +34,5 @@ def load_animation_images(sprite_name, number_of_images):
 
 
 animations = {
-    'projectile': load_animation_images('projectile', 2)
+    'projectile': load_animation_images('projectile', 3)
 }

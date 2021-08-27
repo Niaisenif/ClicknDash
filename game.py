@@ -14,7 +14,7 @@ class Game:
         self.all_enemy = pygame.sprite.Group()
         self.all_enemy_projectiles = pygame.sprite.Group()
         self.enemy = Enemy(self)
-        self.enemy_projectile = EnemyProjectile
+        self.enemy_projectile = EnemyProjectile(self)
         self.pressed = {}
         self.g_force_activated = False
         self.tile = TileLoader(self)
@@ -32,7 +32,8 @@ class Game:
         self.all_enemy_projectiles.draw(self.screen)
         self.enemy.check_player_collide()
         for projectiles in self.all_enemy_projectiles:
-            self.enemy_projectile.move(projectiles)
+            self.enemy_projectile.move()
+            self.enemy_projectile.update_animation()
         self.player.is_touching_ground()
         self.player.update_dash()
         self.player.update_y_value()
