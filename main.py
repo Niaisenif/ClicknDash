@@ -18,7 +18,7 @@ running = True
 
 while running:
 
-    screen.fill((255, 255, 255))
+    screen.fill((50, 50, 50))
 
     game.update_game()
 
@@ -33,7 +33,8 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 game.player.jump()
-                game.enemy.shoot()
+                for enemy in game.all_enemy:
+                    enemy.shoot()
             elif not event.key == pygame.K_SPACE:
                 game.pressed[event.key] = True
 

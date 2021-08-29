@@ -31,11 +31,12 @@ class Game:
         self.all_enemy.draw(self.screen)
         self.all_enemy_projectiles.draw(self.screen)
         self.enemy.check_player_collide()
-        for projectiles in self.all_enemy_projectiles:
-            self.enemy_projectile.move()
-            self.enemy_projectile.update_animation()
+        for projectile in self.all_enemy_projectiles:
+            projectile.move()
+            projectile.update_animation()
         self.player.is_touching_ground()
         self.player.update_dash()
         self.player.update_y_value()
         self.tile.blit_all_tiles(self.screen)
         pygame.draw.circle(self.screen, 1, self.player.rect.center, 300, 1)
+
