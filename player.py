@@ -61,23 +61,30 @@ class Player(pygame.sprite.Sprite):
             self.is_dashing = True
 
     def update_dash(self):
-        while self.game.check_collision(self, self.game.all_tiles):
-            self.rect.center -= self.dash_vector
-            self.dash_counter = 19
-        if self.dash_counter <= 11:
-            self.g_force_activated = False
-            self.rect.center += self.modified_dash_vector
-            self.dash_counter += 1
-        if 13 >= self.dash_counter >= 12:
-            self.g_force_activated = False
-            self.rect.center += (self.modified_dash_vector / 2)
-            self.dash_counter += 1
-        if 14 <= self.dash_counter <= 18:
-            self.g_force_activated = False
-            self.dash_counter += 1
-        if self.dash_counter == 19:
-            self.is_dashing = False
-            self.g_force_activated = True
+        if self.is_dashing:
+
+            if self.game.check_collision(self, self.game.all_tiles):
+                while self.game.check_collision(self, self.game.all_tiles):
+                    self.rect.center -= self.dash_vector * 2
+                self.dash_counter = 19
+
+            if self.dash_counter <= 11:
+                self.g_force_activated = False
+                self.rect.center += self.modified_dash_vector
+                self.dash_counter += 1
+
+            if 13 >= self.dash_counter >= 12:
+                self.g_force_activated = False
+                self.rect.center += (self.modified_dash_vector / 2)
+                self.dash_counter += 1
+
+            if 14 <= self.dash_counter <= 18:
+                self.g_force_activated = False
+                self.dash_counter += 1
+
+            if self.dash_counter == 19:
+                self.is_dashing = False
+                self.g_force_activated = True
 
     def jump(self):
         if not self.is_dashing:
