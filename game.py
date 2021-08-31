@@ -25,6 +25,7 @@ class Game:
         return pygame.sprite.spritecollideany(sprite, group)
 
     def update_game(self):
+        self.tile.blit_all_tiles(self.screen)
         self.screen.blit(self.player.trail.image, (self.player.rect.x + self.player.trail.x_offset,
                                                    self.player.rect.y + self.player.trail.y_offset))
         self.screen.blit(self.player.image, self.player.rect)
@@ -37,6 +38,5 @@ class Game:
         self.player.is_touching_ground()
         self.player.update_dash()
         self.player.update_y_value()
-        self.tile.blit_all_tiles(self.screen)
         pygame.draw.circle(self.screen, 1, self.player.rect.center, 300, 1)
 

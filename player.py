@@ -65,7 +65,7 @@ class Player(pygame.sprite.Sprite):
 
             if self.game.check_collision(self, self.game.all_tiles):
                 while self.game.check_collision(self, self.game.all_tiles):
-                    self.rect.center -= self.dash_vector * 2
+                    self.rect.center -= self.dash_vector * 2  # (without * 2 it loop indefinitely idk why)
                 self.dash_counter = 19
 
             if self.dash_counter <= 11:

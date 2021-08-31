@@ -33,5 +33,5 @@ def load_animation_images(sprite_name, number_of_images):
 
 
 animations = {
-    'projectile': load_animation_images('projectile', 14)
+    'projectile': load_animation_images('projectile', 24)
 }
