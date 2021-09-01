@@ -11,7 +11,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.game = game
         self.rect.x = 900
-        self.rect.y = 400
+        self.rect.y = 400 + 100
         self.game.all_enemy.add(self)
 
     def check_player_collide(self):
@@ -38,7 +38,6 @@ class EnemyProjectile(animations.AnimateSprite):
 
     def new_projectile(self, x, y, velocity, size=1, guided=False):
         self.game.all_enemy_projectiles.add(EnemyProjectile(self.game, x,  y, velocity, size, guided))
-        print(self.guided)
 
     def update_animation(self):
         self.animate(loop=True)

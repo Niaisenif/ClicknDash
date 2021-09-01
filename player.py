@@ -24,6 +24,7 @@ class Player(pygame.sprite.Sprite):
         self.is_dashing = False
         self.dash_vector = None
         self.modified_dash_vector = None
+        self.is_squeaked = False
         self.all_player = pygame.sprite.Group()
         self.all_player.add(self)
 
@@ -45,6 +46,18 @@ class Player(pygame.sprite.Sprite):
             while self.game.check_collision(self, self.game.all_tiles):
                 self.rect.y -= 1
 
+    def squeak(self):
+        if not self.is_dashing and not self.is_jumping:
+            self.image = pygame.transform.scale(self.image, (64, 32))
+            self.rect.y += 32
+            self.is_squeaked = True
+
+    def unsqueak(self):
+        if not self.is_dashing and not self.is_jumping:
+            self.image = pygame.transform.scale(self.image, (64, 64))
+            self.rect.y -= 32
+            self.is_squeaked = False
+
     def is_touching_ground(self):
         if not self.is_dashing:
             if self.game.check_collision(self, self.game.all_tiles):
@@ -54,14 +67,14 @@ class Player(pygame.sprite.Sprite):
                 self.g_force_activated = True
 
     def dash(self):
-        if not self.is_dashing:
+        if not self.is_dashing and not self.is_squeaked:
             self.dash_vector = (pygame.Vector2(pygame.mouse.get_pos()) - self.rect.center).normalize()
             self.modified_dash_vector = (self.dash_vector * 25)
             self.dash_counter = 0
             self.is_dashing = True
 
     def update_dash(self):
-        if self.is_dashing:
+        if self.is_dashing and not self.is_squeaked:
 
             if self.game.check_collision(self, self.game.all_tiles):
                 while self.game.check_collision(self, self.game.all_tiles):
@@ -87,13 +100,13 @@ class Player(pygame.sprite.Sprite):
                 self.g_force_activated = True
 
     def jump(self):
-        if not self.is_dashing:
+        if not self.is_dashing and not self.is_squeaked:
             self.jump_force = 20
             self.is_jumping = True
             self.g_force_activated = True
 
     def move_right(self):
-        if not self.is_dashing:
+        if not self.is_dashing and not self.is_squeaked:
             if self.rect.x < 1600 and not self.game.check_collision(self, self.game.all_tiles):
                 self.rect.x += 10
             self.trail.follow_right()
@@ -101,7 +114,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x -= 1
 
     def move_left(self):
-        if not self.is_dashing:
+        if not self.is_dashing and not self.is_squeaked:
             if self.rect.x > 0 and not self.game.check_collision(self, self.game.all_tiles):
                 self.rect.x -= 10
             self.trail.follow_left()

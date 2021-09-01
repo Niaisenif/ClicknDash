@@ -6,7 +6,7 @@ clock = pygame.time.Clock()
 FPS = 60
 
 pygame.display.set_caption('Platformer attempt')
-screen = pygame.display.set_mode((1600, 896))
+screen = pygame.display.set_mode((1600, 996))
 
 pygame.display.init()
 
@@ -28,6 +28,9 @@ while running:
     elif game.pressed.get(pygame.K_q):
         game.player.move_left()
 
+    elif game.pressed.get(pygame.K_s):
+        game.player.squeak()
+
     for event in pygame.event.get():
 
         if event.type == pygame.KEYDOWN:
@@ -46,6 +49,8 @@ while running:
             game.pressed[event.key] = False
             if event.key == pygame.K_d or pygame.K_q:
                 game.player.trail.x_offset = 0
+            if event.key == pygame.K_s:
+                game.player.unsqueak()
 
         elif event.type == pygame.QUIT:
             running = False

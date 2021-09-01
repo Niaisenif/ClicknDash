@@ -10,7 +10,7 @@ class TileLoader:
         for layer in tmxdata:
             for tile in layer.tiles():
                 x_pixel = tile[0] * 64
-                y_pixel = tile[1] * 64
+                y_pixel = (tile[1] * 64) + 100
                 screen.blit(tile[2], (x_pixel, y_pixel))
                 self.game.all_tiles.add(Tile(tile[2], x_pixel, y_pixel))
 
