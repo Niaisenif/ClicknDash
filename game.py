@@ -2,7 +2,9 @@ import pygame
 from player import Player
 from platform import TileLoader
 from enemies import Enemy, EnemyProjectile
-from overlay import Overlay
+
+
+# from overlay import Overlay
 
 
 class Game:
@@ -11,7 +13,7 @@ class Game:
         self.screen = screen
         self.screen_width = self.screen.get_width()
         self.screen_height = self.screen.get_height()
-        self.overlay = Overlay()
+        # self.overlay = Overlay()
         self.player = Player(self)
         self.all_enemy = pygame.sprite.Group()
         self.all_enemy_projectiles = pygame.sprite.Group()
@@ -41,5 +43,4 @@ class Game:
         self.player.update_dash()
         self.player.update_y_value()
         pygame.draw.circle(self.screen, 1, self.player.rect.center, 300, 1)
-        self.screen.blit(self.overlay.image, self.overlay.rect)
-
+        self.screen.blit(pygame.image.load('assets/Overlay.png'), (0,0))
