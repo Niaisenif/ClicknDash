@@ -12,15 +12,15 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = (self.game.screen_width / 2) - (self.image.get_width() / 2)
         self.rect.y = (self.game.screen_height / 2) - (self.image.get_height() / 2)
         self.trail = PlayerTrail(self.game, self)
+        self.max_health = 300
+        self.health = self.max_health
+        self.damage = 10
         self.g_force = 0
         self.g_force_activated = False
         self.jump_force = 0
         self.is_jumping = False
-        self.dash_x_distance = 0
-        self.dash_y_distance = 0
+        self.reversed = False
         self.dash_counter = 101
-        self.x_destination = 0
-        self.y_destination = 0
         self.is_dashing = False
         self.dash_vector = None
         self.modified_dash_vector = None
@@ -81,6 +81,11 @@ class Player(pygame.sprite.Sprite):
                     self.rect.center -= self.dash_vector * 2  # (without * 2 it loop indefinitely idk why)
                 self.dash_counter = 19
 
+            if self.game.check_collision(self, self.game.all_enemy) and not self.reversed:
+                self.modified_dash_vector -= self.modified_dash_vector * 2
+                self.reversed = True
+                self.dash_counter = 12
+
             if self.dash_counter <= 11:
                 self.g_force_activated = False
                 self.rect.center += self.modified_dash_vector
@@ -95,9 +100,15 @@ class Player(pygame.sprite.Sprite):
                 self.g_force_activated = False
                 self.dash_counter += 1
 
+            if self.game.check_collision(self, self.game.all_enemy) and not self.reversed:
+                self.modified_dash_vector -= self.modified_dash_vector * 2
+                self.reversed = True
+                self.dash_counter = 12
+
             if self.dash_counter == 19:
                 self.is_dashing = False
                 self.g_force_activated = True
+                self.reversed = False
 
     def jump(self):
         if not self.is_dashing and not self.is_squeaked:
@@ -120,6 +131,9 @@ class Player(pygame.sprite.Sprite):
             self.trail.follow_left()
             while self.game.check_collision(self, self.game.all_tiles):
                 self.rect.x += 1
+
+    def update_health(self):
+        pygame.draw.rect(self.game.screen, (255, 0, 0), pygame.Rect((26, 41, self.health - 1, 19)))
 
 
 class PlayerTrail(pygame.sprite.Sprite):
