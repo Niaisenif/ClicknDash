@@ -5,17 +5,17 @@ import animations
 
 class Enemy(pygame.sprite.Sprite):
 
-    def __init__(self, game):
+    def __init__(self, game, x=900, y=500, path="assets/enemy_2.png"):
         super().__init__()
-        self.image = pygame.transform.scale((pygame.image.load("assets/enemy.png")), (128, 128))
+        self.image = pygame.transform.scale((pygame.image.load(path)), (128, 128))
         self.rect = self.image.get_rect()
         self.game = game
-        self.rect.x = 900
-        self.rect.y = 400 + 100
+        self.rect.x = x
+        self.rect.y = y
         self.max_health = 550
         self.health = self.max_health
         self.auto_shoot_counter = 0
-        self.game.all_enemy.add(self)
+        self.E_P = EnemyProjectile(self.game)
 
     def check_player_collide(self):
         if self.game.check_collision(self, self.game.player.all_player) and self.game.player.is_dashing:
@@ -25,7 +25,8 @@ class Enemy(pygame.sprite.Sprite):
         pygame.draw.rect(self.game.screen, (255, 0, 0), pygame.Rect((926, 41, self.health - 1, 19)))
 
     def shoot(self):
-        self.game.enemy_projectile.new_projectile(self.rect.centerx, self.rect.centery, 5, 1, False)
+        # self.game.enemy_projectile.new_projectile(self.rect.centerx, self.rect.centery, 5, 1, False)
+        self.E_P.new_projectile(self.rect.centerx, self.rect.centery, 5, 1, False)
 
     def auto_shoot(self, frames):
         if self.auto_shoot_counter == 0:

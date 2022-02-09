@@ -1,4 +1,4 @@
-import pygame
+import pygame as pygame
 
 pygame.init()
 
@@ -21,7 +21,7 @@ running = True
 
 while running:
 
-    screen.fill((50, 50, 50))
+    screen.fill((9, 174, 75))
 
     if game.is_playing:
         game.update_game()
