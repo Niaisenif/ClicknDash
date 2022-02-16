@@ -6,25 +6,35 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, game):
         super().__init__()
         self.game = game
+
         self.image = pygame.image.load('assets/player.png')
         self.image = pygame.transform.scale(self.image, (64, 64))
         self.rect = self.image.get_rect()
         self.rect.x = (self.game.screen_width / 2) - (self.image.get_width() / 2)
         self.rect.y = (self.game.screen_height / 2) - (self.image.get_height() / 2)
         self.trail = PlayerTrail(self.game, self)
+
         self.max_health = 300
         self.health = self.max_health
         self.damage = 10
+
         self.g_force = 0
         self.g_force_activated = False
         self.jump_force = 0
         self.is_jumping = False
+
         self.reversed = False
         self.dash_counter = 101
         self.is_dashing = False
-        self.dash_vector = None
+        self.dash_vector = []
         self.modified_dash_vector = None
+
+        self.dash_properties = []
+        self.dash_list = []
+        self.dash_number = 0
+
         self.is_squeaked = False
+
         self.all_player = pygame.sprite.Group()
         self.all_player.add(self)
 
@@ -66,14 +76,66 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.g_force_activated = True
 
-    def dash(self):
+    def dash(self): # create the dash
         if not self.is_dashing and not self.is_squeaked:
+            self.dash_properties = self.dash_list[self.dash_number]
+
             self.dash_vector = (pygame.Vector2(pygame.mouse.get_pos()) - self.rect.center).normalize()
+
+            self.dash_direction()
+
             self.modified_dash_vector = (self.dash_vector * 25)
             self.dash_counter = 0
             self.is_dashing = True
 
-    def update_dash(self):
+            if self.dash_number + 1 < len(self.dash_list):
+                self.dash_number += 1
+            else:
+                self.dash_number = 0
+
+    def dash_direction(self):
+        if self.dash_properties[0] == "r":
+            if self.dash_vector[0] < 0:
+                self.dash_vector[0] = -self.dash_vector[0]
+
+        if self.dash_properties[0] == "l":
+            if self.dash_vector[0] > 0:
+                self.dash_vector[0] = -self.dash_vector[0]
+
+        if self.dash_properties[0] == "u":
+            if self.dash_vector[1] > 0:
+                self.dash_vector[1] = -self.dash_vector[1]
+
+        if self.dash_properties[0] == "d":
+            if self.dash_vector[1] < 0:
+                self.dash_vector[1] = -self.dash_vector[1]
+
+        if self.dash_properties[0] == "ru":
+            if self.dash_vector[0] < 0:
+                self.dash_vector[0] = -self.dash_vector[0]
+            if self.dash_vector[1] > 0:
+                self.dash_vector[1] = -self.dash_vector[1]
+
+
+        if self.dash_properties[0] == "rd":
+            if self.dash_vector[0] < 0:
+                self.dash_vector[0] = -self.dash_vector[0]
+            if self.dash_vector[1] < 0:
+                self.dash_vector[1] = -self.dash_vector[1]
+
+        if self.dash_properties[0] == "lu":
+            if self.dash_vector[0] > 0:
+                self.dash_vector[0] = -self.dash_vector[0]
+            if self.dash_vector[1] > 0:
+                self.dash_vector[1] = -self.dash_vector[1]
+
+        if self.dash_properties[0] == "ld":
+            if self.dash_vector[0] > 0:
+                self.dash_vector[0] = -self.dash_vector[0]
+            if self.dash_vector[1] < 0:
+                self.dash_vector[1] = -self.dash_vector[1]
+
+    def update_dash(self): # manage the dash
         if self.is_dashing and not self.is_squeaked:
 
             if self.game.check_collision(self, self.game.all_tiles):

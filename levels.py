@@ -11,18 +11,19 @@ class LevelLoader:
         self.game = game
         self.TL = TileLoader(self.game)
         self.enemy_list = [[[self.game]]]
-        self.dash_list = [[]]
-        self.map_list = [pytmx.load_pygame("assets/map 3.tmx")]
+        self.dash_list = [
+            [["ru"], ["lu"], ["rd"], ["ld"]]
+        ]
+        self.map_list = ["assets/map 3.tmx"]
 
     def load_level(self, level):  # difficulty will be here
         self.load_ennemies(self.enemy_list[level])
-        self.TL.load_all_tiles(self.game.screen, self.map_list[level])
-        self.load_dashes(self.dash_list[level])
+        self.TL.load_all_tiles(self.game.screen, pytmx.load_pygame(self.map_list[level]))
+        self.game.player.dash_list = self.load_dashes(level)
 
     def load_ennemies(self, enemy_list):
         for enemy in enemy_list:
             self.game.all_enemy.add(Enemy(enemy[0]))
 
-    def load_dashes(self, dash_list):
-        a = dash_list
-        return a
+    def load_dashes(self, level):
+        return self.dash_list[level]
