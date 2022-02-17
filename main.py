@@ -44,9 +44,12 @@ while running:
                         enemy.shoot()
                 elif not event.key == pygame.K_SPACE:
                     game.pressed[event.key] = True
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     game.player.dash()
+                    game.Overlay.current_dash = game.player.dash_number
+                    game.Overlay.update_overlay()
 
             elif event.type == pygame.KEYUP:
                 game.pressed[event.key] = False

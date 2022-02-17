@@ -12,7 +12,7 @@ class LevelLoader:
         self.TL = TileLoader(self.game)
         self.enemy_list = [[[self.game]]]
         self.dash_list = [
-            [["ru"], ["lu"], ["rd"], ["ld"]]
+            [["f"], ["l"], ["r"], ["d"], ["u"], ["ru"], ["lu"], ["rd"], ["ld"]]
         ]
         self.map_list = ["assets/map 3.tmx"]
 

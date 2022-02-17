@@ -1,8 +1,6 @@
 import pygame
 from player import Player
-from platform import TileLoader
-from enemies import Enemy, EnemyProjectile
-from overlay import DashPanel
+from overlay import Overlay
 from levels import LevelLoader
 
 
@@ -16,7 +14,6 @@ class Game:
         self.pressed = {}
         self.g_force_activated = False
 
-        # self.overlay = Overlay()
         self.player = Player(self)
 
         self.all_enemy = pygame.sprite.Group()
@@ -25,6 +22,7 @@ class Game:
 
         self.LL = LevelLoader(self)
         self.LL.load_level(0)
+        self.Overlay = Overlay(self)
 
     def check_collision(self, sprite, group):
         return pygame.sprite.spritecollideany(sprite, group)
@@ -37,8 +35,11 @@ class Game:
         self.screen.blit(self.player.image, self.player.rect)
         self.all_enemy.draw(self.screen)
         self.all_enemy_projectiles.draw(self.screen)
+        self.Overlay.all_panels.draw(self.screen)
+
         for enemy in self.all_enemy:
             enemy.check_player_collide()
+
         self.player.update_health()
         for projectile in self.all_enemy_projectiles:
             projectile.move()

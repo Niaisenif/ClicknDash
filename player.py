@@ -85,6 +85,7 @@ class Player(pygame.sprite.Sprite):
             self.dash_direction()
 
             self.modified_dash_vector = (self.dash_vector * 25)
+# There is probably a subtle difference between the dash ending location and the supposed location due to normalizing.
             self.dash_counter = 0
             self.is_dashing = True
 
@@ -92,6 +93,7 @@ class Player(pygame.sprite.Sprite):
                 self.dash_number += 1
             else:
                 self.dash_number = 0
+
 
     def dash_direction(self):
         if self.dash_properties[0] == "r":
@@ -116,7 +118,6 @@ class Player(pygame.sprite.Sprite):
             if self.dash_vector[1] > 0:
                 self.dash_vector[1] = -self.dash_vector[1]
 
-
         if self.dash_properties[0] == "rd":
             if self.dash_vector[0] < 0:
                 self.dash_vector[0] = -self.dash_vector[0]
@@ -135,7 +136,7 @@ class Player(pygame.sprite.Sprite):
             if self.dash_vector[1] < 0:
                 self.dash_vector[1] = -self.dash_vector[1]
 
-    def update_dash(self): # manage the dash
+    def update_dash(self):  # manage the dash
         if self.is_dashing and not self.is_squeaked:
 
             if self.game.check_collision(self, self.game.all_tiles):
@@ -163,7 +164,7 @@ class Player(pygame.sprite.Sprite):
                 self.dash_counter += 1
 
             if self.game.check_collision(self, self.game.all_enemy) and not self.reversed:
-                self.modified_dash_vector -= self.modified_dash_vector * 2
+                self.modified_dash_vector = -self.modified_dash_vector
                 self.reversed = True
                 self.dash_counter = 12
 
