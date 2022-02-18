@@ -32,11 +32,17 @@ class Player(pygame.sprite.Sprite):
         self.dash_properties = []
         self.dash_list = []
         self.dash_number = 0
+        self.stored_dash = ["f"]
 
         self.is_squeaked = False
 
         self.all_player = pygame.sprite.Group()
         self.all_player.add(self)
+
+    def swap_dash(self):
+        temporary = self.dash_list[self.dash_number]
+        self.dash_list[self.dash_number] = self.stored_dash
+        self.stored_dash = temporary
 
     def update_y_value(self):
         if not self.is_dashing:
@@ -62,7 +68,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += 32
             self.is_squeaked = True
 
-    def unsqueak(self):
+    def un_squeak(self):
         if not self.is_dashing and not self.is_jumping:
             self.image = pygame.transform.scale(self.image, (64, 64))
             self.rect.y -= 32
@@ -76,7 +82,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.g_force_activated = True
 
-    def dash(self): # create the dash
+    def dash(self):  # create the dash
         if not self.is_dashing and not self.is_squeaked:
             self.dash_properties = self.dash_list[self.dash_number]
 
@@ -93,7 +99,6 @@ class Player(pygame.sprite.Sprite):
                 self.dash_number += 1
             else:
                 self.dash_number = 0
-
 
     def dash_direction(self):
         if self.dash_properties[0] == "r":
@@ -141,7 +146,8 @@ class Player(pygame.sprite.Sprite):
 
             if self.game.check_collision(self, self.game.all_tiles):
                 while self.game.check_collision(self, self.game.all_tiles):
-                    self.rect.center -= self.dash_vector * 2  # (without * 2 it loop indefinitely idk why)
+                    # noinspection GrazieInspection
+                    self.rect.center -= self.dash_vector * 2  # (without * 2 it loops indefinitely idk why)
                 self.dash_counter = 19
 
             if self.game.check_collision(self, self.game.all_enemy) and not self.reversed:

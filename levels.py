@@ -1,5 +1,3 @@
-# import pygame
-import game
 import pytmx
 from enemies import Enemy
 from platform import TileLoader

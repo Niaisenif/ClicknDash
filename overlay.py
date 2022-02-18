@@ -11,40 +11,44 @@ class Overlay:
         self.update_overlay()
 
     def path_creator(self, place, i):
-        dash_number = self.current_dash
-        for x in range(i):
-            dash_number += 1
-            if dash_number > len(self.dash_list) - 1:
-                dash_number = 0
+        if i == -1:
+            dash = self.game.player.stored_dash
+        else:
+            dash_number = self.current_dash
+            for x in range(i):
+                dash_number += 1
+                if dash_number > len(self.dash_list) - 1:
+                    dash_number = 0
+            dash = self.dash_list[dash_number]
 
         path = "assets/Dashes/"
         if place > 1:
             path += "little_"
-        if self.dash_list[dash_number][0] == "f":
+        if dash[0] == "f":
             path += "free_"
-        if self.dash_list[dash_number][0] == "r":
+        if dash[0] == "r":
             path += "right_"
-        if self.dash_list[dash_number][0] == "l":
+        if dash[0] == "l":
             path += "left_"
-        if self.dash_list[dash_number][0] == "u":
+        if dash[0] == "u":
             path += "up_"
-        if self.dash_list[dash_number][0] == "d":
+        if dash[0] == "d":
             path += "down_"
-        if self.dash_list[dash_number][0] == "ru":
+        if dash[0] == "ru":
             path += "right-up_"
-        if self.dash_list[dash_number][0] == "rd":
+        if dash[0] == "rd":
             path += "right-down_"
-        if self.dash_list[dash_number][0] == "lu":
+        if dash[0] == "lu":
             path += "left-up_"
-        if self.dash_list[dash_number][0] == "ld":
+        if dash[0] == "ld":
             path += "left-down_"
 
         path += "normal.png"  # will be modified and extended
         return path
 
-
     def update_overlay(self):
         self.all_panels = pygame.sprite.Group()
+        self.all_panels.add(DashPanel(self.path_creator(0, -1), 0))
         self.all_panels.add(DashPanel(self.path_creator(1, 0), 1))
         self.all_panels.add(DashPanel(self.path_creator(2, 1), 2))
         self.all_panels.add(DashPanel(self.path_creator(3, 2), 3))

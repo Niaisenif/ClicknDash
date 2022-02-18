@@ -24,7 +24,8 @@ class Game:
         self.LL.load_level(0)
         self.Overlay = Overlay(self)
 
-    def check_collision(self, sprite, group):
+    @staticmethod  # idk why but pycharm is happier with that
+    def check_collision(sprite, group):
         return pygame.sprite.spritecollideany(sprite, group)
 
     def update_game(self):

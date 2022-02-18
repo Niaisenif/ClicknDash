@@ -42,7 +42,10 @@ while running:
                     game.player.jump()
                     for enemy in game.all_enemy:
                         enemy.shoot()
-                elif not event.key == pygame.K_SPACE:
+                elif event.key == pygame.K_g:
+                    game.player.swap_dash()
+                    game.Overlay.update_overlay()
+                else:
                     game.pressed[event.key] = True
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -56,7 +59,7 @@ while running:
                 if event.key == pygame.K_d or pygame.K_q:
                     game.player.trail.x_offset = 0
                 if event.key == pygame.K_s:
-                    game.player.unsqueak()
+                    game.player.un_squeak()
 
             if event.type == pygame.QUIT or game.player.health <= 0:
                 game.is_playing = False
@@ -65,6 +68,7 @@ while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                # noinspection PyStatementEffect
                 pygame.quit
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button_rect.collidepoint(event.pos):

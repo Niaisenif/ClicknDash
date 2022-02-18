@@ -2,10 +2,12 @@ import pygame
 import pytmx
 
 
+# noinspection SpellCheckingInspection
 class TileLoader:
     def __init__(self, game):
         self.game = game
 
+    # noinspection SpellCheckingInspection
     def load_all_tiles(self, screen, tmxdata=pytmx.load_pygame("assets/map 3.tmx")):
         for layer in tmxdata:
             for tile in layer.tiles():
