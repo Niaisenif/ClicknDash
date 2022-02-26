@@ -11,13 +11,15 @@ screen = pygame.display.set_mode((1600, 996))
 pygame.display.init()
 
 from game import Game
+from menu import MenuManager
 
-game = Game(screen)
-play_button = pygame.image.load("assets/Play_Button.png")
-play_button_rect = play_button.get_rect()
-play_button_rect.x = 750
-play_button_rect.y = 448
+game = Game(screen, -1)
+MM = MenuManager()
 running = True
+in_start_menu = True
+MM.load_menu("start")
+game.is_playing, game.is_paused = False, False
+
 
 while running:
 
@@ -25,34 +27,44 @@ while running:
 
     if game.is_playing:
         game.update_game()
+        if not game.is_paused:
+            if game.pressed.get(pygame.K_d):
+                game.player.move_right()
 
-        if game.pressed.get(pygame.K_d):
-            game.player.move_right()
+            elif game.pressed.get(pygame.K_q):
+                game.player.move_left()
 
-        elif game.pressed.get(pygame.K_q):
-            game.player.move_left()
-
-        elif game.pressed.get(pygame.K_s):
-            game.player.squeak()
+            elif game.pressed.get(pygame.K_s):
+                game.player.squeak()
 
         for event in pygame.event.get():
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    game.player.jump()
-                    for enemy in game.all_enemy:
-                        enemy.shoot()
-                elif event.key == pygame.K_g:
-                    game.player.swap_dash()
-                    game.Overlay.update_overlay()
+                if not game.is_paused:
+                    if event.key == pygame.K_SPACE:
+                        game.player.jump()
+                        for enemy in game.all_enemy:
+                            enemy.shoot()
+
+                    elif event.key == pygame.K_g:
+                        game.player.swap_dash()
+                        game.Overlay.update_overlay()
+
+                if event.key == pygame.K_p:
+                    if game.is_paused:
+                        game.is_paused = False
+                    else:
+                        game.is_paused = True
+
                 else:
                     game.pressed[event.key] = True
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    game.player.dash()
-                    game.Overlay.current_dash = game.player.dash_number
-                    game.Overlay.update_overlay()
+                    if not game.is_paused:
+                        game.player.dash()
+                        game.Overlay.current_dash = game.player.dash_number
+                        game.Overlay.update_overlay()
 
             elif event.type == pygame.KEYUP:
                 game.pressed[event.key] = False
@@ -62,18 +74,25 @@ while running:
                     game.player.un_squeak()
 
             if event.type == pygame.QUIT or game.player.health <= 0:
-                game.is_playing = False
+                game.is_paused = True
+                player_is_dead = True
+                MM.load_menu("dead")
     else:
-        screen.blit(play_button, play_button_rect)
+        if in_start_menu:
+            MM.all_blitted_buttons.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 # noinspection PyStatementEffect
                 pygame.quit
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if play_button_rect.collidepoint(event.pos):
-                    game.is_playing = True
-                    game.__init__(screen)
+                for button in MM.all_blitted_buttons:
+                    if button.rect.collidepoint(event.pos):
+                        if button.effect == "launch_game":
+                            game.is_playing = True
+                            game.__init__(screen, button.effect_number)
+                        if button.effect == "level_menu":
+                            MM.load_menu("levels")
 
     pygame.display.flip()
     clock.tick(FPS)

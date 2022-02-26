@@ -1,0 +1,15 @@
+To-Do list:
+
+ -Proper menus
+    -level selection
+ -Tutorial
+ -levels
+    -ennemies
+    -maps
+    -mechanics (dashes)
+ -Better player sprite
+ -score
+    -stars ?
+ -Easter eggs ?
+    - achievements ?
+

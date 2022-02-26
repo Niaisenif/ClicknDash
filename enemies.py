@@ -17,10 +17,11 @@ class Enemy(pygame.sprite.Sprite):
         self.E_P = EnemyProjectile(self.game)
 
     def check_player_collide(self):
-        if self.game.check_collision(self, self.game.player.all_player) and self.game.player.is_dashing:
-            if self.health <= 0:
-                self.game.all_enemy.remove(self)
-            self.health -= self.game.player.damage
+        if not self.game.is_paused:
+            if self.game.check_collision(self, self.game.player.all_player) and self.game.player.is_dashing:
+                if self.health <= 0:
+                    self.game.all_enemy.remove(self)
+                self.health -= self.game.player.damage
         pygame.draw.rect(self.game.screen, (255, 0, 0), pygame.Rect((926, 41, self.health - 1, 19)))
 
     def shoot(self):

@@ -10,6 +10,3 @@ rd = right-down
 lu = left-up
 ld = left-down
 
-
-
-it doesn't destroy the dash from the list it only picks it up and goes to the next dash, but you must not be able to do it twice in a row

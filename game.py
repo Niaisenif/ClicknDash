@@ -6,8 +6,9 @@ from levels import LevelLoader
 
 class Game:
 
-    def __init__(self, screen):
+    def __init__(self, screen, level):
         self.is_playing = True
+        self.is_paused = False
         self.screen = screen
         self.screen_width = self.screen.get_width()
         self.screen_height = self.screen.get_height()
@@ -21,8 +22,9 @@ class Game:
         self.all_tiles = pygame.sprite.Group()
 
         self.LL = LevelLoader(self)
-        self.LL.load_level(0)
-        self.Overlay = Overlay(self)
+        if level > -1:
+            self.LL.load_level(level)
+            self.Overlay = Overlay(self)
 
     @staticmethod  # idk why but pycharm is happier with that
     def check_collision(sprite, group):
@@ -42,10 +44,11 @@ class Game:
             enemy.check_player_collide()
 
         self.player.update_health()
-        for projectile in self.all_enemy_projectiles:
-            projectile.move()
-            projectile.update_animation()
-        self.player.is_touching_ground()
-        self.player.update_dash()
-        self.player.update_y_value()
+        if not self.is_paused:
+            for projectile in self.all_enemy_projectiles:
+                projectile.move()
+                projectile.update_animation()
+            self.player.is_touching_ground()
+            self.player.update_dash()
+            self.player.update_y_value()
         pygame.draw.circle(self.screen, 1, self.player.rect.center, 300, 1)
