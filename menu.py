@@ -7,6 +7,8 @@ class MenuManager:
         self.all_blitted_buttons = pygame.sprite.Group()
 
     def load_menu(self, menu):
+        if menu == "clear":
+            self.all_blitted_buttons = pygame.sprite.Group()
         if menu == "start":
             self.all_blitted_buttons = pygame.sprite.Group()
             self.all_blitted_buttons.add(Button("assets/Play_Button.png", (800, 498), "level_menu", 0))
@@ -16,6 +18,11 @@ class MenuManager:
                                          Button("assets/Play_Button.png", (1000, 298), "launch_game", 0),
                                          Button("assets/Play_Button.png", (600, 698), "launch_game", 0),
                                          Button("assets/Play_Button.png", (1000, 698), "launch_game", 0))
+        if menu == "pause":
+            self.all_blitted_buttons = pygame.sprite.Group()
+            self.all_blitted_buttons.add(Button("assets/Play_Button.png", (600, 550), "resume", 0),
+                                         Button("assets/Restart_Button.png", (800, 550), "launch_game", 0),
+                                         Button("assets/Menu_Button.png", (1000, 550), "level_menu", 0))
 
 
 class Button(pygame.sprite.Sprite):

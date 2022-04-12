@@ -50,11 +50,13 @@ while running:
                         game.player.swap_dash()
                         game.Overlay.update_overlay()
 
-                if event.key == pygame.K_p:
+                if event.key == pygame.K_ESCAPE:
                     if game.is_paused:
                         game.is_paused = False
+                        MM.load_menu("clear")
                     else:
                         game.is_paused = True
+                        MM.load_menu("pause")
 
                 else:
                     game.pressed[event.key] = True
@@ -65,6 +67,19 @@ while running:
                         game.player.dash()
                         game.Overlay.current_dash = game.player.dash_number
                         game.Overlay.update_overlay()
+                    else:
+                        for button in MM.all_blitted_buttons:
+                            if button.rect.collidepoint(event.pos):
+                                if button.effect == "launch_game":
+                                    game.is_playing = True
+                                    game.__init__(screen, button.effect_number)
+                                    MM.load_menu("clear")
+                                if button.effect == "level_menu":
+                                    game.is_playing = False
+                                    MM.load_menu("levels")
+                                elif button.effect == "resume":
+                                    game.is_paused = False
+                                    MM.load_menu("clear")
 
             elif event.type == pygame.KEYUP:
                 game.pressed[event.key] = False
@@ -76,23 +91,26 @@ while running:
             if event.type == pygame.QUIT or game.player.health <= 0:
                 game.is_paused = True
                 player_is_dead = True
-                MM.load_menu("dead")
-    else:
-        if in_start_menu:
-            MM.all_blitted_buttons.draw(screen)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                # noinspection PyStatementEffect
-                pygame.quit
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                for button in MM.all_blitted_buttons:
-                    if button.rect.collidepoint(event.pos):
-                        if button.effect == "launch_game":
-                            game.is_playing = True
-                            game.__init__(screen, button.effect_number)
-                        if button.effect == "level_menu":
-                            MM.load_menu("levels")
+                game.is_playing = False
+                MM.load_menu("start")
+
+    MM.all_blitted_buttons.draw(screen)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            # noinspection PyStatementEffect
+            pygame.quit
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for button in MM.all_blitted_buttons:
+                if button.rect.collidepoint(event.pos):
+                    if button.effect == "launch_game":
+                        game.is_playing = True
+                        game.__init__(screen, button.effect_number)
+                        MM.load_menu("clear")
+                    if button.effect == "level_menu":
+                        MM.load_menu("levels")
 
     pygame.display.flip()
     clock.tick(FPS)
