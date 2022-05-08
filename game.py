@@ -42,6 +42,7 @@ class Game:
 
         for enemy in self.all_enemy:
             enemy.check_player_collide()
+            enemy.follow_player()
 
         self.player.update_health()
         if not self.is_paused:

@@ -1,12 +1,16 @@
 import pygame
 import animations
+import math
+
+import game
 
 
 class Enemy(pygame.sprite.Sprite):
 
     def __init__(self, game, x=900, y=500, path="assets/enemy_2.png"):
         super().__init__()
-        self.image = pygame.transform.scale((pygame.image.load(path)), (128, 128))
+        self.origin_image = pygame.transform.scale((pygame.image.load(path)), (128, 128))
+        self.image = self.origin_image
         self.rect = self.image.get_rect()
         self.game = game
         self.rect.x = x
@@ -14,6 +18,7 @@ class Enemy(pygame.sprite.Sprite):
         self.max_health = 550
         self.health = self.max_health
         self.auto_shoot_counter = 0
+        self.angle = 0
         self.E_P = EnemyProjectile(self.game)
 
     def check_player_collide(self):
@@ -35,6 +40,12 @@ class Enemy(pygame.sprite.Sprite):
         else:
             self.auto_shoot_counter -= 1
 
+    def follow_player(self):
+        self.angle = math.degrees(math.atan2(- self.rect.centery + self.game.player.rect.centery,
+                                             self.rect.centerx - self.game.player.rect.centerx)) + 90
+        self.image = pygame.transform.rotozoom(self.origin_image, self.angle, 1)
+        self.rect = self.image.get_rect(center=self.rect.center)
+
 
 class EnemyProjectile(animations.AnimateSprite):
 
@@ -54,7 +65,7 @@ class EnemyProjectile(animations.AnimateSprite):
             self.vector = (pygame.Vector2(self.game.player.rect.center) - self.rect.center).normalize()
 
     def new_projectile(self, x, y, velocity, size=1, guided=False):
-        self.game.all_enemy_projectiles.add(EnemyProjectile(self.game, x,  y, velocity, size, guided))
+        self.game.all_enemy_projectiles.add(EnemyProjectile(self.game, x, y, velocity, size, guided))
 
     def update_animation(self):
         self.animate(loop=True)
